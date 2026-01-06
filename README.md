@@ -1,4 +1,4 @@
-# Tidal Clock
+# Tide Clock
 
 A battery-powered e-paper display showing tide times for Margate, UK. A low-power e-paper tide clock.
 
