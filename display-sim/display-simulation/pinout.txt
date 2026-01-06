@@ -1,0 +1,30 @@
+PA0: DS3231 INT (over mosefet), NT3H2111 FD (over mosfet)
+PA1: Gate pin for VCC mosfet of ds3231
+PA2: Gate pin for VCC mosfet of NT3H2111
+PA3: Gate pin for VCC mosfet of Display
+PA4: Display CS
+PA5: Display CLK
+PA6: Display DC
+PA7: Display DIN
+PA8: Display RST
+PA9: Display Busy
+PA10: DS3231 RST
+PA11: NC
+PA12: Test Point
+PA13: St-link connection
+PA14: st-lin connection
+PB1: Test Point
+PB2-5: NC
+PB6: SCL (ds3231, nt3h2111)
+PB7: SDA
+PB8-14: NC
+PB15: Testpoint
+PC0-5: NC
+PC6-7: Test Point
+PC8-10:NC
+PC11: LED
+PC12: NC
+PC13: NC
+PC14: DS3231 osc out
+PC15: NC
+PD2: LED

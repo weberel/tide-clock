@@ -1,0 +1,34 @@
+# External dependencies
+display-sim/display-simulation/u8g2/
+display-sim/firmware/lib/u8g2/
+
+# Build artifacts
+display-sim/display-simulation/build/
+display-sim/display-simulation/tide_sim
+display-sim/display-simulation/verify_astro
+display-sim/display-simulation/debug_tide
+display-sim/display-simulation/check_*
+display-sim/display-simulation/test_newton
+display-sim/firmware/.pio/
+*.o
+*.pyc
+__pycache__/
+
+# Generated frames
+display-sim/display-simulation/frames_yearly/
+display-sim/display-simulation/frames_monthly/
+display-sim/display-simulation/test_frames/
+display-sim/display-simulation/test_outputs/
+display-sim/display-simulation/sequence/
+
+# Large data files
+display-sim/harmonic_fitting/pla_minute/
+*.nc
+
+# Generated images
+*.gif
+*.pkl
+
+# KiCad generated
+kicad/*.step
+kicad/fp-info-cache

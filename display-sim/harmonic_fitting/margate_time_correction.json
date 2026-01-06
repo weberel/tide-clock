@@ -1,0 +1,20 @@
+{
+  "description": "Empirical time correction for Margate tide predictions",
+  "units": "minutes (subtract from predicted time)",
+  "nodal": {
+    "period_years": 18.61,
+    "amplitude_min": -4.399,
+    "phase_year": 2015.613,
+    "offset_min": 0.454
+  },
+  "annual": {
+    "period_years": 1.0,
+    "amplitude_min": 1.689,
+    "phase_year": -0.266
+  },
+  "semiannual": {
+    "period_years": 0.5,
+    "amplitude_min": 0.887,
+    "phase_year": -0.118
+  }
+}
