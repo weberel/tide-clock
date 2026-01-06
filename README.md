@@ -2,7 +2,7 @@
 
 A battery-powered e-paper display showing tide times for Margate, UK. A low-power e-paper tide clock.
 
-![Tide Display](manual/tide_display.png)
+![Tide Clock](img.jpg)
 
 ## Features
 
@@ -14,6 +14,9 @@ A battery-powered e-paper display showing tide times for Margate, UK. A low-powe
 - **Multi-year battery life** - 15-minute wake cycles with deep sleep between updates
 
 ## Hardware
+
+<img src="pcb_front.png" width="80%">
+<img src="pcb_back.png" width="80%">
 
 - **MCU**: STM32F411RET6 (ARM Cortex-M4)
 - **Display**: 2.9" e-paper (296x128, SSD1680 controller)
@@ -40,6 +43,8 @@ gift/
 See [kicad/versions.md](kicad/versions.md) for hardware differences between revisions.
 
 ## Building the Simulator
+
+![Tide Display](manual/tide_display.png)
 
 ```bash
 # Prerequisites (Ubuntu/Debian)
