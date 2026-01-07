@@ -3,6 +3,12 @@
 
 #include "timezone.h"
 
+/**
+ * Initialize tide model from location_config.h.
+ * Called automatically on first use, but can be called explicitly at startup.
+ */
+void tide_init(void);
+
 // Tide event structure
 typedef struct {
     time64_t time;

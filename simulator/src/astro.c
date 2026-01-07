@@ -3,9 +3,11 @@
  *
  * Moon phase: Jean Meeus algorithm (Astronomical Algorithms Ch.49)
  * Sunrise/Sunset: NOAA Solar Calculator
+ * Location loaded from location_config.h
  */
 
 #include "astro.h"
+#include "location_config.h"
 #include <math.h>
 
 #ifndef M_PI
@@ -122,10 +124,6 @@ void find_next_full_new_moon(time64_t dt, time64_t *next_full, time64_t *next_ne
 // Sunrise/Sunset Calculations (NOAA Algorithm)
 // ============================================================================
 
-// Margate coordinates
-#define MARGATE_LAT  51.3813f
-#define MARGATE_LON  1.3862f
-
 void calculate_sunrise_sunset(time64_t dt, int *sunrise_hour, int *sunrise_min,
                               int *sunset_hour, int *sunset_min) {
     struct tm tm_info;
@@ -141,15 +139,15 @@ void calculate_sunrise_sunset(time64_t dt, int *sunrise_hour, int *sunrise_min,
                  - 0.006758 * cos(2*gamma) + 0.000907 * sin(2*gamma)
                  - 0.002697 * cos(3*gamma) + 0.00148 * sin(3*gamma);
 
-    float lat_rad = MARGATE_LAT * M_PI / 180.0;
+    float lat_rad = LOCATION_LAT * M_PI / 180.0;
     float zenith = 90.833 * M_PI / 180.0;
     float cos_hour_angle = (cos(zenith) / (cos(lat_rad) * cos(decl))) - tan(lat_rad) * tan(decl);
     cos_hour_angle = fmax(-1, fmin(1, cos_hour_angle));
 
     float hour_angle = acos(cos_hour_angle) * 180.0 / M_PI;
 
-    float sunrise_utc_min = 720 - 4 * (MARGATE_LON + hour_angle) - eqtime;
-    float sunset_utc_min = 720 - 4 * (MARGATE_LON - hour_angle) - eqtime;
+    float sunrise_utc_min = 720 - 4 * (LOCATION_LON + hour_angle) - eqtime;
+    float sunset_utc_min = 720 - 4 * (LOCATION_LON - hour_angle) - eqtime;
 
     float sunrise_utc = sunrise_utc_min / 60.0;
     float sunset_utc = sunset_utc_min / 60.0;

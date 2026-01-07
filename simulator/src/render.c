@@ -9,6 +9,7 @@
 #include "tide.h"
 #include "astro.h"
 #include "timezone.h"
+#include "location_config.h"
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
@@ -181,7 +182,7 @@ void render_tide_display(time64_t target_time, const char *message) {
             int in_bar = (x >= tide_bar_x && x < tide_bar_x + tide_bar_w);
             int prev_in_bar = (prev_x >= tide_bar_x && prev_x < tide_bar_x + tide_bar_w);
             if (!in_bar && !prev_in_bar) {
-                display_draw_line(prev_x, prev_y, x, y, COLOR_BLACK, 1);
+                display_draw_line(prev_x, prev_y, x, y, COLOR_BLACK, 2);
             }
         }
         prev_x = x;
@@ -211,7 +212,7 @@ void render_tide_display(time64_t target_time, const char *message) {
     int line_y = DISPLAY_HEIGHT - 33;
     display_draw_line(0, line_y, DISPLAY_WIDTH, line_y, COLOR_BLACK, 2);
 
-    int margate_width = display_get_text_width("Margate", FONT_LARGE);
-    int margate_x = (DISPLAY_WIDTH - margate_width) / 2;
-    display_draw_text(margate_x, DISPLAY_HEIGHT - 8, "Margate", FONT_LARGE);
+    int location_width = display_get_text_width(LOCATION_NAME, FONT_LARGE);
+    int location_x = (DISPLAY_WIDTH - location_width) / 2;
+    display_draw_text(location_x, DISPLAY_HEIGHT - 8, LOCATION_NAME, FONT_LARGE);
 }

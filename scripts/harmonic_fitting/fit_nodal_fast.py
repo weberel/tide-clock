@@ -478,11 +478,22 @@ def main():
         'Mf', 'Mm',
     ]
 
-    # Load data
-    times, heights = load_minute_data(
-        'pla_minute/margate_minute_2019-2026.csv',
-        start_year=2019, end_year=2026, subsample=10
-    )
+    # Load data from data/margate folder
+    # Combine yearly files
+    import glob
+    minute_files = sorted(glob.glob('data/margate/margate_minute_*.csv'))
+    if not minute_files:
+        print("Error: No minute data files found in data/margate/")
+        print("Expected files like: data/margate/margate_minute_2019.csv")
+        return
+
+    all_times, all_heights = [], []
+    for f in minute_files:
+        t, h = load_minute_data(f, subsample=10)
+        all_times.extend(t)
+        all_heights.extend(h)
+    times = all_times
+    heights = np.array(all_heights)
 
     # Fit with nodal corrections
     import time
@@ -500,20 +511,12 @@ def main():
     print("VALIDATION")
     print("=" * 70)
 
-    hwlw_file = 'pla_hwlw/margate_hwlw_2010-2040.csv'
-    archive_file = 'archive/3_Data/2_Margate.txt'
+    hwlw_file = 'data/margate/margate_hwlw_2010-2040.csv'
 
-    print("\n--- PLA Predictions ---")
+    print("\n--- Validation against HWLW data ---")
     for start_y, end_y in [(2010, 2015), (2016, 2020), (2021, 2025), (2026, 2030), (2031, 2040)]:
         try:
             validate_hwlw_parallel(model, hwlw_file, start_y, end_y, max_events=5000)
-        except Exception as e:
-            print(f"  Error: {e}")
-
-    print("\n--- Historic Archive ---")
-    for start_y, end_y in [(1967, 1975), (1976, 1985), (1986, 1995)]:
-        try:
-            validate_archive(model, archive_file, start_y, end_y)
         except Exception as e:
             print(f"  Error: {e}")
 

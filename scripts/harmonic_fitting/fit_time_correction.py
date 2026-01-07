@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Fit time correction parameters for Margate tide predictions.
+Fit time correction parameters for tide predictions.
 
 This script fits the empirical time correction that compensates for:
 - 18.61-year lunar nodal cycle
@@ -13,10 +13,9 @@ Usage:
     python fit_time_correction.py [--dataset DATASET]
 
 Datasets:
-    pla_2019_2022  - PLA predictions 2019-2022 (produces values closest to firmware)
-    pla_2019_2026  - PLA predictions 2019-2026 (more data, slightly different values)
-    pla_all        - All PLA predictions 2010-2040
-    all            - Archive 1967-1995 + PLA 2010-2040
+    pla_2019_2022  - HWLW data 2019-2022 (default)
+    pla_2019_2026  - HWLW data 2019-2026
+    pla_all        - All HWLW data 2010-2040
 
 Output:
     - margate_time_correction_fitted.json  - Fitted parameters
@@ -106,7 +105,7 @@ def find_extremum(dt, search_hours=7, is_high=True):
 
 def load_pla_hwlw():
     """Load PLA high/low water predictions."""
-    filepath = Path('pla_hwlw/margate_hwlw_2010-2040.csv')
+    filepath = Path('data/margate/margate_hwlw_2010-2040.csv')
     data = []
     with open(filepath, 'r') as f:
         reader = csv.DictReader(f)
@@ -119,27 +118,6 @@ def load_pla_hwlw():
             })
     return data
 
-def load_archive_data():
-    """Load historical archive data (1967-1995)."""
-    filepath = Path('archive/3_Data/2_Margate.txt')
-    data = []
-    with open(filepath, 'r') as f:
-        for line in f:
-            parts = line.strip().split(',')
-            if len(parts) < 3:
-                continue
-            try:
-                dt = datetime.strptime(parts[0].strip(), '%d/%m/%Y %H:%M:%S')
-                height = float(parts[1].strip())
-                is_high = parts[2].strip() == '1'
-                data.append({
-                    'datetime': dt,
-                    'height': height,
-                    'type': 'HW' if is_high else 'LW'
-                })
-            except (ValueError, IndexError):
-                continue
-    return data
 
 def calculate_time_errors(observations, verbose=True):
     """Calculate time errors for each observation."""
@@ -185,10 +163,6 @@ def load_data(dataset='pla_2019_2022'):
         obs = [d for d in pla_data if 2019 <= d['datetime'].year <= 2026]
     elif dataset == 'pla_all':
         obs = pla_data
-    elif dataset == 'all':
-        archive_data = load_archive_data()
-        print(f"  Archive data: {len(archive_data)} observations")
-        obs = archive_data + pla_data
     else:
         raise ValueError(f"Unknown dataset: {dataset}")
 
