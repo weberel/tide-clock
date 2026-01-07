@@ -144,12 +144,15 @@ def load_noaa_constituents(station_id):
         sys.exit(1)
 
     # Build lookup by constituent name
+    # Use phase_local which includes the station's longitude correction
     noaa_data = {}
     for c in data['HarmonicConstituents']:
+        # Prefer phase_local over phase_GMT for station-specific predictions
+        phase = float(c.get('phase_local', c['phase_GMT']))
         noaa_data[c['name']] = {
             'amplitude': float(c['amplitude']),
             'speed': float(c['speed']),
-            'phase': float(c['phase_GMT']),
+            'phase': phase,
         }
 
     # Map to our standard order
@@ -198,11 +201,14 @@ def epoch_to_unix(epoch_str):
     return int(dt.timestamp())
 
 
-def generate_config(name, lat, lon, tz_rule, tide_data, corrections=None):
+def generate_config(name, display_name, lat, lon, tz_rule, tide_data, corrections=None):
     """Generate location_config.h content."""
 
     tz = TZ_RULES[tz_rule]
     epoch_unix = epoch_to_unix(tide_data['epoch'])
+
+    # Use display_name for screen, fall back to name
+    screen_name = display_name if display_name else name
 
     # Default corrections (zeros if not provided)
     if corrections is None:
@@ -239,7 +245,7 @@ def generate_config(name, lat, lon, tz_rule, tide_data, corrections=None):
     lines.append('// Location')
     lines.append('// ============================================================================')
     lines.append('')
-    lines.append(f'#define LOCATION_NAME "{name}"')
+    lines.append(f'#define LOCATION_NAME "{screen_name}"  // Display name (keep short to fit screen)')
     lines.append(f'#define LOCATION_LAT {lat}f')
     lines.append(f'#define LOCATION_LON {lon}f')
     lines.append('')
@@ -337,7 +343,8 @@ Examples:
 
     parser.add_argument('--json', metavar='FILE', help='Load constituents from fitted JSON file')
     parser.add_argument('--noaa', metavar='STATION_ID', help='Load constituents from NOAA station')
-    parser.add_argument('--name', required=False, help='Location name for display')
+    parser.add_argument('--name', required=False, help='Location name (used in comments)')
+    parser.add_argument('--display-name', metavar='NAME', help='Short name for display (defaults to --name)')
     parser.add_argument('--lat', type=float, help='Latitude (degrees, positive=North)')
     parser.add_argument('--lon', type=float, help='Longitude (degrees, positive=East)')
     parser.add_argument('--tz', choices=list(TZ_RULES.keys()), help='Timezone rule')
@@ -404,7 +411,8 @@ Examples:
         }
 
     # Generate config
-    content = generate_config(args.name, args.lat, args.lon, args.tz, tide_data, corrections)
+    display_name = getattr(args, 'display_name', None)
+    content = generate_config(args.name, display_name, args.lat, args.lon, args.tz, tide_data, corrections)
 
     if args.dry_run:
         print(content)

@@ -152,15 +152,20 @@ void calculate_sunrise_sunset(time64_t dt, int *sunrise_hour, int *sunrise_min,
     float sunrise_utc = sunrise_utc_min / 60.0;
     float sunset_utc = sunset_utc_min / 60.0;
 
-    // Add BST offset if applicable
-    int bst = is_bst(dt);
-    if (bst) {
-        sunrise_utc += 1.0f;
-        sunset_utc += 1.0f;
-    }
+    // Add timezone offset (hours)
+    int offset_seconds = get_utc_offset(dt);
+    float offset_hours = offset_seconds / 3600.0f;
+    float sunrise_local = sunrise_utc + offset_hours;
+    float sunset_local = sunset_utc + offset_hours;
 
-    *sunrise_hour = (int)sunrise_utc;
-    *sunrise_min = (int)((sunrise_utc - *sunrise_hour) * 60);
-    *sunset_hour = (int)sunset_utc;
-    *sunset_min = (int)((sunset_utc - *sunset_hour) * 60);
+    // Handle day wraparound
+    if (sunrise_local < 0) sunrise_local += 24.0f;
+    if (sunrise_local >= 24) sunrise_local -= 24.0f;
+    if (sunset_local < 0) sunset_local += 24.0f;
+    if (sunset_local >= 24) sunset_local -= 24.0f;
+
+    *sunrise_hour = (int)sunrise_local;
+    *sunrise_min = (int)((sunrise_local - *sunrise_hour) * 60);
+    *sunset_hour = (int)sunset_local;
+    *sunset_min = (int)((sunset_local - *sunset_hour) * 60);
 }

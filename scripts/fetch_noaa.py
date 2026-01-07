@@ -94,10 +94,12 @@ def format_constituents(harmonics, station_info=None):
     """Format constituents as JSON compatible with generate_location.py."""
     constituents = {}
     for c in harmonics:
+        # Use phase_local which includes station's longitude correction
+        phase = float(c.get('phase_local', c['phase_GMT']))
         constituents[c['name']] = {
             'amplitude': float(c['amplitude']),
             'speed': float(c['speed']),
-            'phase': float(c['phase_GMT']),
+            'phase': phase,
         }
 
     result = {

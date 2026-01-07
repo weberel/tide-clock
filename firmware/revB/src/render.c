@@ -129,16 +129,18 @@ void render_tide_display(time64_t target_time, const char *message) {
     display_draw_text(sun_cx - times_gap - sunrise_width, sun_times_y, sunrise_str, FONT_MEDIUM);
     display_draw_text(sun_cx + times_gap, sun_times_y, sunset_str, FONT_MEDIUM);
 
-    int daylight_bar_y = sun_times_y + 6;
-    int daylight_bar_h = 6;
-    display_draw_rect(0, daylight_bar_y, DISPLAY_WIDTH, daylight_bar_h, 255, COLOR_BLACK);
+    int daylight_bar_y = sun_times_y + 4;
+    int daylight_bar_h = 4;
+    // Draw top border line only
+    display_draw_line(0, daylight_bar_y, DISPLAY_WIDTH - 1, daylight_bar_y, COLOR_BLACK, 1);
 
     float sunrise_frac = (sunrise_h + sunrise_m / 60.0) / 24.0;
     float sunset_frac = (sunset_h + sunset_m / 60.0) / 24.0;
     int sunrise_x = (int)(sunrise_frac * DISPLAY_WIDTH);
     int sunset_x = (int)(sunset_frac * DISPLAY_WIDTH);
-    display_draw_rect(1, daylight_bar_y + 1, sunrise_x - 2, daylight_bar_h - 2, COLOR_BLACK, 255);
-    display_draw_rect(sunset_x + 1, daylight_bar_y + 1, DISPLAY_WIDTH - sunset_x - 2, daylight_bar_h - 2, COLOR_BLACK, 255);
+    // Fill nighttime (before sunrise and after sunset) with black
+    display_draw_rect(0, daylight_bar_y + 1, sunrise_x, daylight_bar_h - 1, COLOR_BLACK, 255);
+    display_draw_rect(sunset_x, daylight_bar_y + 1, DISPLAY_WIDTH - sunset_x, daylight_bar_h - 1, COLOR_BLACK, 255);
 
     // --- Tide section ---
     int tide_bar_w = 15;

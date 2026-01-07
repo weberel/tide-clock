@@ -15,6 +15,9 @@ python3 fetch_noaa.py --state CA
 
 # Generate config
 python3 generate_location.py --noaa 9414290 --name "San Francisco" --tz US_PACIFIC
+
+# Use --display-name for a shorter name on screen
+python3 generate_location.py --noaa 8723170 --name "Miami Beach, FL" --display-name "Miami" --tz US_EASTERN
 ```
 
 ### Other Locations (using fitted model)
