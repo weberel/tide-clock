@@ -27,17 +27,18 @@ A battery-powered e-paper display showing tide times for Margate, UK. A low-powe
 ## Project Structure
 
 ```
-gift/
+tidal-clock/
+├── firmware/
+│   ├── revA/                  # STM32 firmware for Rev A
+│   └── revB/                  # STM32 firmware for Rev B
+├── simulator/                 # C simulator (SDL2)
+├── scripts/
+│   └── harmonic_fitting/      # Tide model fitting scripts
 ├── kicad/
-│   ├── RevA/                   # Hardware Rev A (tested)
-│   ├── RevB/                   # Hardware Rev B (not yet tested)
-│   └── versions.md            # Hardware version changelog
-├── manual/                     # User manual (PDF + LaTeX)
-└── display-sim/
-    ├── display-simulation/     # C simulator (SDL2)
-    ├── firmware-revA/          # STM32 firmware for Rev A
-    ├── firmware-revB/          # STM32 firmware for Rev B
-    └── harmonic_fitting/       # Tide model fitting scripts
+│   ├── RevA/                  # Hardware Rev A (tested)
+│   ├── RevB/                  # Hardware Rev B (not yet tested)
+│   └── versions.md           # Hardware version changelog
+└── manual/                    # User manual (PDF + LaTeX)
 ```
 
 See [kicad/versions.md](kicad/versions.md) for hardware differences between revisions.
@@ -51,7 +52,7 @@ See [kicad/versions.md](kicad/versions.md) for hardware differences between revi
 sudo apt install libsdl2-dev gcc make
 
 # Clone and build
-cd display-sim/display-simulation
+cd simulator
 git clone https://github.com/olikraus/u8g2.git
 make
 
@@ -66,13 +67,13 @@ make
 
 ```bash
 # For Rev A hardware
-cd display-sim/firmware-revA
+cd firmware/revA
 cd lib && git clone https://github.com/olikraus/u8g2.git && cd ..
 pio run
 pio run --target upload  # via ST-Link
 
 # For Rev B hardware
-cd display-sim/firmware-revB
+cd firmware/revB
 cd lib && git clone https://github.com/olikraus/u8g2.git && cd ..
 pio run
 pio run --target upload
