@@ -1,6 +1,6 @@
 # Tide Clock
 
-A battery-powered e-paper display showing tide times. Configurable for any coastal location.
+A battery-powered e-paper display showing tide times. Configurable for any coastal location. This device does not need an internet or bluetooth connection as all data is calculated on the device itself from a given time and location. Thanks to the display type and slow refreshrate with long sleep cycles this device can operate on two AA-batteries for at least 3 years.
 
 ![Tide Clock](img.jpg)
 
